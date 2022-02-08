@@ -1,5 +1,9 @@
-import json
-from flask import Flask, request
+from flask import (
+    Flask, 
+    request,
+    render_template
+)
+
 from datetime import datetime
 
 app = Flask(__name__)
@@ -27,7 +31,7 @@ def create_user():
     )
 
     out = {'new_id': new_id}
-    return out
+    return out, 201
 
 @app.get("/users")
 def get_all_users():
@@ -51,10 +55,18 @@ def update_user(pk):
         user_data.get("last_name"),
         user_data.get("hobbies")
     )
-    return 204
+    return "", 204
 
 @app.delete("/users/<int:pk>")
 def deactivate_user(pk):
     user.deactivate_user(pk)
-    return 204
+    return "", 204
     
+#@app.put("/users/<int:pk>/activate")
+#def reactivate_user(pk):
+#   user.reactivate_user(pk)
+#   return "", 204
+
+@app.get("/")
+def index():
+    return render_template("index.html")
